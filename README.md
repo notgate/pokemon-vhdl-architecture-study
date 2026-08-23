@@ -1,4 +1,4 @@
-# Game Boy–Inspired Pokémon VHDL Architecture Study
+# Game Boy–Inspired VHDL Architecture Study
 
 **Archived academic design study in VHDL, with a working focus on VGA timing and simulation.**
 
