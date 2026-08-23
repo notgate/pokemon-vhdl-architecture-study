@@ -41,14 +41,14 @@ The main lessons were:
 
 1. HDL describes concurrent hardware, not a sequence of software instructions.
 2. Each subsystem needs a focused testbench and acceptance criteria before integration.
-3. A semester FPGA project should be scoped around a small, demonstrable hardware function.
+3. A semester digital-hardware project should be scoped around a small, demonstrable function.
 
-## Tools and platform
+## Tools and evidence environment
 
 - VHDL
-- Xilinx Vivado Design Suite
 - ModelSim
-- Digilent Basys 3 course platform
+
+The original report does not name a synthesis tool or FPGA platform and states that the team worked with no board or output display. The preserved artifacts therefore document source and simulation work, not FPGA deployment.
 
 ## Original architecture
 
