@@ -1,0 +1,22 @@
+name: VHDL verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install GHDL
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ghdl
+      - name: Analyze, simulate, and verify generated frame
+        run: python3 scripts/run_tests.py

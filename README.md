@@ -1,66 +1,63 @@
-# Game Boy–Inspired VHDL Architecture Study
+# Game Boy–Style VGA Pixel Pipeline
 
-**Archived academic design study in VHDL, with a working focus on VGA timing and simulation.**
+**A board-agnostic VHDL-2008 video pipeline that generates VGA timing and renders a small four-shade tile-and-sprite scene.**
 
-> **Status:** This was an ambitious December 2024 course project, not a completed Game Boy emulator or playable Pokémon implementation. The full CPU, memory, and game architecture was not validated. This repository preserves the report, diagrams, code excerpts, and simulation evidence without overstating the result.
+![Simulation-generated VGA frame](docs/assets/vga-frame.png)
 
-![Display-controller simulation waveform](docs/assets/vga-simulation-waveform.png)
+## Purpose
 
-## Project scope
+This project focuses on one concrete digital-hardware problem: producing pixel coordinates, synchronization signals, and RGB values for a complete display frame. A 160×144 logical screen is enlarged by 3× integer pixel replication and centered inside a 640×480 VGA active area.
 
-The project attempted to express a small Pokémon/Game Boy–inspired architecture as synchronous digital hardware. Planned modules covered:
+The implementation is a ground-up 2026 rebuild by **Uthso Paul** of the display-controller idea from a 2024 Computer Organization & Architecture team project with **Richard Gill**. The rebuilt source, testbenches, diagram, and simulation-generated frame in this repository are new and narrow the earlier broad system concept to a focused video design.
 
-- player input and game-state control;
-- battle and encounter behavior;
-- profile, team, move, and type data;
-- map and memory control;
-- VGA timing and RGB display output.
+## Hardware pipeline
 
-The work was completed as a team project by **Uthso Paul and Richard Gill** for CSCI 155, Computer Organization & Architecture.
+![VHDL video-pipeline architecture](docs/assets/video-pipeline.svg)
 
-## What worked
+The RTL is divided into four small units:
 
-The strongest implemented subsystem was the display controller:
+1. **VGA timing** — advances 800×525 horizontal/vertical counters and produces active-low HSYNC and VSYNC.
+2. **Coordinate mapping** — converts physical VGA coordinates into 160×144 logical pixel coordinates inside a centered 3× viewport.
+3. **Pixel rendering** — generates a procedural 8×8 tile background and one original 16×16 sprite with transparent pixels.
+4. **Priority and palette** — overlays opaque sprite pixels on the background and converts each 2-bit shade into 12-bit RGB (4:4:4).
 
-- horizontal and vertical pixel counters;
-- HSYNC and VSYNC timing;
-- active-video gating;
-- pixel-coordinate outputs;
-- RGB selection between map and sprite inputs;
-- ModelSim waveform inspection.
+The scope is intentionally limited to video hardware. It does not include a processor core, cartridge interface, commercial game code, or extracted artwork.
 
-![VGA output logic](docs/assets/vga-output-logic.png)
+## Repository layout
 
-The simulation artifacts show the signals used to inspect the controller. They do not demonstrate a rendered game, a programmed FPGA, or a complete synthesized system.
+```text
+src/                       VHDL-2008 design units
+tests/                     GHDL testbenches and repository contract tests
+scripts/run_tests.py       Reproducible analysis, simulation, and asset check
+scripts/ppm_to_png.py      Dependency-free frame conversion
+docs/ARCHITECTURE.md       Timing and pixel-pipeline design
+docs/VERIFICATION.md       Assertions, counts, and generated-evidence chain
+docs/assets/               Project-owned diagram and generated VGA frame
+```
 
-## What did not work
+## Run the simulation
 
-The project initially treated VHDL too much like sequential programming. Several planned game, processor, and memory modules would need to be restructured around explicit registers, clocked datapaths, finite-state machines, and synthesizable memories before integration.
+Requirements: GHDL with VHDL-2008 support and Python 3.
 
-The main lessons were:
+```text
+python scripts/run_tests.py
+```
 
-1. HDL describes concurrent hardware, not a sequence of software instructions.
-2. Each subsystem needs a focused testbench and acceptance criteria before integration.
-3. A semester digital-hardware project should be scoped around a small, demonstrable function.
+The command analyzes all design units, performs GHDL synthesis elaboration on `gb_video_top`, runs three simulations, produces a complete PPM frame from the top-level RGB outputs, converts it to PNG, and verifies that the result matches the committed image.
 
-## Tools and evidence environment
+## Verified behavior
 
-- VHDL
-- ModelSim
+- one complete 800×525 timing frame checked cycle by cycle;
+- 307,200 active VGA pixels per frame;
+- 96-pixel active-low HSYNC pulse on every line;
+- two-line active-low VSYNC pulse per frame;
+- exact 480×432 centered viewport for the scaled 160×144 logical screen;
+- blanking, viewport bounds, 3× replication, transparent sprite pixels, and sprite priority asserted;
+- GHDL synthesis elaboration of the integrated top level;
+- deterministic 640×480 simulation-generated frame checked against the committed PNG.
 
-The original report does not name a synthesis tool or FPGA platform and states that the team worked with no board or output display. The preserved artifacts therefore document source and simulation work, not FPGA deployment.
-
-## Original architecture
-
-![Original high-level architecture diagram](docs/assets/architecture-diagram.jpg)
-
-## Project artifacts
-
-- [Original course report](docs/Pokemon-VHDL-Project-Report.docx)
-- [Architecture diagram](docs/assets/architecture-diagram.jpg)
-- [VGA output logic excerpt](docs/assets/vga-output-logic.png)
-- [Display-controller simulation waveform](docs/assets/vga-simulation-waveform.png)
+See [Architecture](docs/ARCHITECTURE.md) and [Verification](docs/VERIFICATION.md) for the exact constants and acceptance criteria.
 
 ## Attribution
 
-This is an educational architecture study. Pokémon, Game Boy, and related marks belong to their respective owners. No game ROM, commercial game source code, or extracted game assets are included.
+Game Boy is a trademark of Nintendo. This independent educational project uses no Nintendo source code, ROM data, or artwork. The VHDL implementation and project-owned visuals are released under the [MIT License](LICENSE).
