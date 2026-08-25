@@ -1,95 +1,83 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
-  <title id="title">Game Boy-style VGA pixel pipeline</title>
-  <desc id="desc">Hardware flow from pixel clock and reset through VGA timing, logical coordinate mapping, tile and sprite generators, a priority multiplexer, a two-bit palette, and RGB output.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="360" viewBox="0 0 1600 360" role="img" aria-labelledby="title desc">
+  <title id="title">VHDL hardware flow</title>
+  <desc id="desc">Pixel clock and reset feed VGA timing. Coordinates feed a coordinate map, parallel tile and sprite generators, a priority multiplexer, a two-bit palette, and VGA output. Sync also runs from VGA timing to the output.</desc>
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#24423a"/>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L9 4.5L0 9Z" fill="#000"/>
     </marker>
     <style>
-      .bg { fill:#f5f8ef; }
-      .box { fill:#e0f0cc; stroke:#24423a; stroke-width:2; rx:10; }
-      .source { fill:#f4f0d5; }
-      .output { fill:#d8ebe3; }
-      .title { font:700 22px Arial, sans-serif; fill:#132a24; }
-      .label { font:700 16px Arial, sans-serif; fill:#132a24; text-anchor:middle; }
-      .sub { font:13px Arial, sans-serif; fill:#355b50; text-anchor:middle; }
-      .edge { fill:none; stroke:#24423a; stroke-width:2.4; marker-end:url(#arrow); }
-      .tap { fill:none; stroke:#52756a; stroke-width:2; marker-end:url(#arrow); }
-      .edge-label { font:12px Arial, sans-serif; fill:#355b50; text-anchor:middle; }
-      .note { font:13px Arial, sans-serif; fill:#355b50; }
+      .node,.divider{fill:#fff;stroke:#000;stroke-width:1.3}
+      .edge{fill:none;stroke:#000;stroke-width:1.5;marker-end:url(#arrow)}
+      .label{font:18px 'Times New Roman',Times,serif;fill:#000;text-anchor:middle;dominant-baseline:middle}
+      .small{font-size:16px}
     </style>
   </defs>
+  <rect width="1600" height="360" fill="#fff"/>
 
-  <rect class="bg" width="1200" height="520"/>
-  <text class="title" x="40" y="42">VHDL-2008 video hardware flow</text>
-  <text class="note" x="40" y="68">One raster coordinate drives independent background and sprite pixel sources; opaque sprite pixels win at the priority mux.</text>
+  <path class="edge" d="M130 67C155 67 150 147.5 180 147.5"/>
+  <path class="edge" d="M130 293C155 293 150 212.5 180 212.5"/>
+  <path class="edge" d="M430 147.5C447 147.5 447 180 465 180"/>
+  <path class="edge" d="M685 180C705 180 700 77 720 77"/>
+  <path class="edge" d="M685 180C705 180 700 283 720 283"/>
+  <path class="edge" d="M940 77C960 77 955 147.5 975 147.5"/>
+  <path class="edge" d="M940 283C960 283 955 212.5 975 212.5"/>
+  <path class="edge" d="M1225 180H1260"/>
+  <path class="edge" d="M1460 180H1475"/>
+  <path class="edge" d="M430 212.5C450 212.5 445 338 800 338H1435C1460 338 1465 232 1495 207"/>
 
-  <path class="edge" d="M175 215 H245"/>
-  <path class="edge" d="M395 215 H465"/>
-  <path class="tap" d="M320 270 V410 H1070"/>
-  <path class="edge" d="M615 215 H670 V155 H715"/>
-  <path class="edge" d="M615 215 H670 V315 H715"/>
-  <path class="edge" d="M865 155 H900 V235 H925"/>
-  <path class="edge" d="M865 315 H900 V255 H925"/>
-  <path class="edge" d="M1035 245 H1080"/>
+  <rect class="node" x="20" y="40" width="110" height="54"/>
+  <text class="label small" x="75" y="67">pixel clock</text>
+  <rect class="node" x="20" y="266" width="110" height="54"/>
+  <text class="label small" x="75" y="293">reset</text>
 
-  <text class="edge-label" x="210" y="201">clock/reset</text>
-  <text class="edge-label" x="430" y="201">x, y, active</text>
-  <text class="edge-label" x="640" y="397">HSYNC / VSYNC</text>
+  <rect class="node" x="180" y="115" width="250" height="130"/>
+  <line class="divider" x1="245" y1="115" x2="245" y2="245"/>
+  <line class="divider" x1="365" y1="115" x2="365" y2="245"/>
+  <line class="divider" x1="180" y1="180" x2="245" y2="180"/>
+  <line class="divider" x1="365" y1="180" x2="430" y2="180"/>
+  <text class="label small" x="212.5" y="147.5">clock</text>
+  <text class="label small" x="212.5" y="212.5">reset</text>
+  <text class="label" x="305" y="180">VGA timing</text>
+  <text class="label small" x="397.5" y="147.5">x, y</text>
+  <text class="label small" x="397.5" y="212.5">sync</text>
 
-  <g>
-    <rect class="box source" x="35" y="165" width="140" height="100"/>
-    <text class="label" x="105" y="207">Pixel clock</text>
-    <text class="label" x="105" y="229">+ reset</text>
-    <text class="sub" x="105" y="251">nominal 25 MHz</text>
-  </g>
+  <rect class="node" x="465" y="138" width="220" height="84"/>
+  <line class="divider" x1="520" y1="138" x2="520" y2="222"/>
+  <line class="divider" x1="630" y1="138" x2="630" y2="222"/>
+  <text class="label small" x="492.5" y="180">x, y</text>
+  <text class="label small" x="575" y="180">coordinate map</text>
+  <text class="label small" x="657.5" y="180">logical</text>
 
-  <g>
-    <rect class="box" x="245" y="150" width="150" height="120"/>
-    <text class="label" x="320" y="193">VGA timing</text>
-    <text class="sub" x="320" y="219">800 × 525 counters</text>
-    <text class="sub" x="320" y="241">active-low sync</text>
-  </g>
+  <rect class="node" x="720" y="35" width="220" height="84"/>
+  <line class="divider" x1="775" y1="35" x2="775" y2="119"/>
+  <line class="divider" x1="900" y1="35" x2="900" y2="119"/>
+  <text class="label small" x="747.5" y="77">logical</text>
+  <text class="label small" x="837.5" y="77">Tile generator</text>
+  <text class="label small" x="920" y="77">shade</text>
 
-  <g>
-    <rect class="box" x="465" y="150" width="150" height="120"/>
-    <text class="label" x="540" y="188">Logical</text>
-    <text class="label" x="540" y="210">coordinate map</text>
-    <text class="sub" x="540" y="236">160 × 144 at 3×</text>
-    <text class="sub" x="540" y="255">centered viewport</text>
-  </g>
+  <rect class="node" x="720" y="241" width="220" height="84"/>
+  <line class="divider" x1="775" y1="241" x2="775" y2="325"/>
+  <line class="divider" x1="900" y1="241" x2="900" y2="325"/>
+  <text class="label small" x="747.5" y="283">logical</text>
+  <text class="label small" x="837.5" y="283">Sprite generator</text>
+  <text class="label small" x="920" y="283">shade</text>
 
-  <g>
-    <rect class="box" x="715" y="105" width="150" height="100"/>
-    <text class="label" x="790" y="146">Tile generator</text>
-    <text class="sub" x="790" y="173">procedural 8 × 8</text>
-  </g>
+  <rect class="node" x="975" y="115" width="250" height="130"/>
+  <line class="divider" x1="1040" y1="115" x2="1040" y2="245"/>
+  <line class="divider" x1="1160" y1="115" x2="1160" y2="245"/>
+  <line class="divider" x1="975" y1="180" x2="1040" y2="180"/>
+  <text class="label small" x="1007.5" y="147.5">tile</text>
+  <text class="label small" x="1007.5" y="212.5">sprite</text>
+  <text class="label" x="1100" y="180">Priority mux</text>
+  <text class="label small" x="1192.5" y="180">shade</text>
 
-  <g>
-    <rect class="box" x="715" y="265" width="150" height="100"/>
-    <text class="label" x="790" y="306">Sprite generator</text>
-    <text class="sub" x="790" y="333">16 × 16 + opacity</text>
-  </g>
+  <rect class="node" x="1260" y="138" width="200" height="84"/>
+  <line class="divider" x1="1315" y1="138" x2="1315" y2="222"/>
+  <line class="divider" x1="1400" y1="138" x2="1400" y2="222"/>
+  <text class="label small" x="1287.5" y="180">shade</text>
+  <text class="label small" x="1357.5" y="180">2-bit palette</text>
+  <text class="label small" x="1430" y="180">RGB</text>
 
-  <g>
-    <rect class="box" x="925" y="195" width="110" height="100"/>
-    <text class="label" x="980" y="237">Priority mux</text>
-    <text class="sub" x="980" y="263">sprite over tile</text>
-  </g>
-
-  <g>
-    <rect class="box output" x="1080" y="195" width="90" height="100"/>
-    <text class="label" x="1125" y="229">2-bit palette</text>
-    <text class="sub" x="1125" y="253">RGB 4:4:4</text>
-    <text class="sub" x="1125" y="276">12 outputs</text>
-  </g>
-
-  <g>
-    <rect class="box output" x="1070" y="380" width="100" height="60"/>
-    <text class="label" x="1120" y="406">VGA sync</text>
-    <text class="sub" x="1120" y="426">2 outputs</text>
-  </g>
-
-  <rect x="40" y="475" width="1120" height="1" fill="#9eb7aa"/>
-  <text class="note" x="40" y="500">Portable boundary: pixel clock and reset in; HSYNC, VSYNC, and 12-bit RGB out.</text>
+  <ellipse class="node" cx="1530" cy="180" rx="55" ry="34"/>
+  <text class="label small" x="1530" y="180">VGA output</text>
 </svg>

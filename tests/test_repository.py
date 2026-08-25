@@ -57,6 +57,29 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertNotRegex(svg, re.compile(r"\b(?:href|src)\s*=\s*['\"]https?://", re.I))
         self.assertGreater(frame.stat().st_size, 2_000)
 
+    def test_architecture_svg_uses_the_minimal_asr_pipeline_grammar(self):
+        svg = (ROOT / "docs/assets/video-pipeline.svg").read_text(encoding="utf-8")
+        visible_labels = re.findall(r"<text[^>]*>(.*?)</text>", svg)
+
+        for label in [
+            "pixel clock",
+            "reset",
+            "VGA timing",
+            "coordinate map",
+            "Tile generator",
+            "Sprite generator",
+            "Priority mux",
+            "2-bit palette",
+            "VGA output",
+        ]:
+            self.assertIn(label, visible_labels)
+
+        self.assertLessEqual(len(visible_labels), 24)
+        self.assertNotRegex(svg, re.compile(r'class="(?:title|note|sub|edge-label)"'))
+        self.assertNotRegex(svg, re.compile(r"VHDL-2008 video hardware flow|Portable boundary|nominal 25 MHz|opaque sprite pixels win", re.I))
+        self.assertNotRegex(svg, re.compile(r"<rect[^>]*\brx=", re.I))
+        self.assertEqual(set(re.findall(r"#[0-9a-fA-F]{3,6}\b", svg)), {"#000", "#fff"})
+
     def test_readme_claims_are_narrow_and_reproducible(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for phrase in [
@@ -70,6 +93,9 @@ class RepositoryContractTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, readme)
         self.assertNotRegex(readme, re.compile(r"emulator|cartridge compatible|cycle[- ]accurate|synthesized on|deployed to", re.I))
+        self.assertLessEqual(len(readme.splitlines()), 50)
+        for heading in ["## Repository layout", "## Verified behavior", "## Attribution"]:
+            self.assertNotIn(heading, readme)
 
     def test_runner_keeps_synthesis_elaboration_as_a_release_gate(self):
         runner = (ROOT / "scripts/run_tests.py").read_text(encoding="utf-8")
