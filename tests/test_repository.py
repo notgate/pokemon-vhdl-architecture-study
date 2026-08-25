@@ -94,7 +94,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertIn(phrase, readme)
         self.assertNotRegex(readme, re.compile(r"emulator|cartridge compatible|cycle[- ]accurate|synthesized on|deployed to", re.I))
         self.assertLessEqual(len(readme.splitlines()), 50)
-        for heading in ["## Repository layout", "## Verified behavior", "## Attribution"]:
+        for heading in ["## Purpose", "## Project files", "## Repository layout", "## Verified behavior", "## Attribution"]:
             self.assertNotIn(heading, readme)
 
     def test_runner_keeps_synthesis_elaboration_as_a_release_gate(self):

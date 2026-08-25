@@ -4,11 +4,11 @@
 
 ![VHDL hardware flow](docs/assets/video-pipeline.svg)
 
-## Purpose
+## Design context
 
-This project began as the display idea from a 2024 Computer Organization & Architecture team project with **Richard Gill**. I rebuilt that part as a focused VHDL design rather than trying to reproduce a complete game system.
+The display path began as one part of a 2024 Computer Organization & Architecture team project with **Richard Gill**. This rebuild isolates that idea as a board-agnostic VHDL-2008 controller rather than attempting a complete game system.
 
-The research focused on 640×480 VGA timing, integer coordinate scaling, tile and sprite pixels, display priority, and four-shade RGB output without a framebuffer.
+I reviewed 640×480 VGA raster timing and nearest-neighbor integer scaling to place a 160×144 logical image inside the active video area. The renderer combines tile and sprite shade values before a four-entry RGB palette, without requiring a framebuffer.
 
 ## Hardware design
 
@@ -27,7 +27,7 @@ GHDL testbenches check the timing, coordinate mapping, sprite priority, and comm
 python scripts/run_tests.py
 ```
 
-## Project files
+## Documentation
 
 - [VHDL source](src/)
 - [Architecture notes](docs/ARCHITECTURE.md)
